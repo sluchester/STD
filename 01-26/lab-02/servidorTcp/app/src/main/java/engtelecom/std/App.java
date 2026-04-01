@@ -9,30 +9,24 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Executors;
 
 public class App {
     public static void main(String[] args) {
-        int porta = (args.length > 0) ? Integer.parseInt(args[0]) : 5555;
+        int porta = (args.length > 0) ? Integer.parseInt(args[0]) : 12345;
 
         System.out.printf("Servidor ouvindo na porta: %d%n", porta);
 
         try (
             var conexao = new ServerSocket(porta);
-            //espera cliente conectar
-            var cliente = conexao.accept();
-
-            var entrada = new BufferedReader(new InputStreamReader(cliente.getInputStream(), StandardCharsets.UTF_8));
-            var saida = new BufferedWriter(new OutputStreamWriter(cliente.getOutputStream(), StandardCharsets.UTF_8));
+            var executor = Executors.newVirtualThreadPerTaskExecutor()
         ){
-            // aqui começa o protocolo
-            //1- cliente escreve
-            String mensagemDoCliente = entrada.readLine();
-            System.out.printf("Cliente disse: %s%n \n", mensagemDoCliente);
-
-            //2- servidor responde
-            saida.write("Oi cliente, tudo bem?");
-            saida.newLine();
-            saida.flush();
+            while(!Thread.currentThread().isInterrupted()){
+                //espera cliente conectar
+                var cliente = conexao.accept();
+                //criar uma thread para atender esse cliente
+                executor.submit(new AtenderCliente(cliente));
+            }
 
         } catch (Exception e) {
             System.err.println("erro " + e);
