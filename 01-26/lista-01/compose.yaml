@@ -1,0 +1,37 @@
+services:
+  gerenciador:
+    build: ./gerenciador-atualizacoes
+    container_name: gerenciador
+    hostname: gerenciador
+    stdin_open: true
+    tty: true
+    networks:
+      - iot-net
+
+  dispositivo1:
+    build: ./dispositivo-iot
+    container_name: dispositivo1
+    hostname: dispositivo1
+    command: ["v1.0"]
+    networks:
+      - iot-net
+
+  dispositivo2:
+    build: ./dispositivo-iot
+    container_name: dispositivo2
+    hostname: dispositivo2
+    command: ["v1.0"]
+    networks:
+      - iot-net
+
+  dispositivo3:
+    build: ./dispositivo-iot
+    container_name: dispositivo3
+    hostname: dispositivo3
+    command: ["v1.0"]
+    networks:
+      - iot-net
+
+networks:
+  iot-net:
+    driver: bridge
