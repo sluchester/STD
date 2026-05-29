@@ -1,0 +1,22 @@
+info:
+  name: Untitled 1
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: http://localhost:8080/saudacao?nome=Juca&nome=TesteLuan
+  params:
+    - name: nome
+      value: Juca
+      type: query
+    - name: nome
+      value: TesteLuan
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
